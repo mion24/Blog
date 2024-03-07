@@ -20,6 +20,11 @@ namespace Blog.Api.Extensions
              Core.Contexts.PostContext.UseCases.Delete.Contracts.IRepository,
              Infra.Contexts.PostContext.UseCases.Delete.Repository
              >();
+
+            builder.Services.AddTransient<
+            Core.Contexts.PostContext.UseCases.Put.Contracts.IRepository,
+            Infra.Contexts.PostContext.UseCases.Put.Repository
+            >();
         }
 
         public static void MapPostEndpoints(this WebApplication app)
@@ -57,6 +62,20 @@ namespace Blog.Api.Extensions
              IRequestHandler<
                  Blog.Core.Contexts.PostContext.UseCases.Delete.Request,
                  Blog.Core.Contexts.PostContext.UseCases.Delete.Response> handler) =>
+            {
+                var result = await handler.Handle(request, new CancellationToken());
+                return result.IsSuccess
+                    ? Results.Ok(result)
+                    : Results.Json(result, statusCode: result.Status);
+            }).RequireAuthorization();
+            #endregion
+
+            #region put
+            app.MapPut("v1/put-post", async (
+             Blog.Core.Contexts.PostContext.UseCases.Put.Request request,
+             IRequestHandler<
+                 Blog.Core.Contexts.PostContext.UseCases.Put.Request,
+                 Blog.Core.Contexts.PostContext.UseCases.Put.Response> handler) =>
             {
                 var result = await handler.Handle(request, new CancellationToken());
                 return result.IsSuccess

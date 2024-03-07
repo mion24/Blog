@@ -1,0 +1,47 @@
+﻿.box {
+    background-color: #000; /* Cor de fundo preta */
+    color: #fff; /* Cor do texto branco */
+    width: 300px; /* Largura da caixa */
+    padding: 20px; /* Espaçamento interno */
+    border-radius: 10px; /* Raio da borda */
+    margin: 50px auto; /* Centralizar horizontalmente */
+    display: flex; /* Usar flexbox para layout */
+    flex-direction: column; /* Direção do layout como coluna */
+    align-items: center; /* Centralizar horizontalmente */
+    text-align: center; /* Centralizar texto horizontalmente */
+}
+
+.input-field {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border: none;
+    background-color: #333; /* Cor de fundo dos inputs */
+    color: #fff; /* Cor do texto dos inputs */
+    border-radius: 5px; /* Raio da borda dos inputs */
+}
+
+.btn-container {
+    width: 100%;
+    display: flex;
+    justify-content: space-between; /* Distribuir os botões igualmente */
+}
+
+.btn {
+    width: calc(50% - 5px); /* Largura de 50% menos o espaçamento */
+    padding: 10px;
+    border: none;
+    background-color: #555; /* Cor de fundo dos botões */
+    color: #fff; /* Cor do texto dos botões */
+    border-radius: 5px; /* Raio da borda dos botões */
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+.btn-container .btn:first-child {
+    margin-right: 5px; /* Espaço entre os botões */
+}
+
+.btn-container .btn:last-child {
+    margin-left: 5px; /* Espaço entre os botões */
+}

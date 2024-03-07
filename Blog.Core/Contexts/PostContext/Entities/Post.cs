@@ -1,4 +1,5 @@
 ﻿using Blog.Core.Contexts.AccountContext.Entities;
+using Blog.Core.Contexts.PostContext.UseCases.Put;
 using Blog.Core.Contexts.SharedContext.Entities;
 using System;
 using System.Collections.Generic;
@@ -24,5 +25,14 @@ namespace Blog.Core.Contexts.PostContext.Entities
         public DateTime RegisterDate { get; private set; }
         public bool Edit { get; set; }
         public Guid OwnerID { get; private set; }
+
+        public void Update(Request request)
+        {
+            Title = request.Title;
+            Description = request.Description;
+            Edit = true;
+        }
     }
+
+    
 }
