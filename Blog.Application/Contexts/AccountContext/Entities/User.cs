@@ -1,4 +1,4 @@
-﻿namespace Blog.Application.Contexts.AccountContext
+﻿namespace Blog.Application.Contexts.AccountContext.Entities
 {
     public class User
     {

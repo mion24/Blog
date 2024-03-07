@@ -1,0 +1,12 @@
+﻿@using Blog.Application.Contexts.PostContext.Entities
+@foreach (var post in Posts)
+{
+    <div class="post-card">
+        <PostCard Post="@post" />
+    </div>
+}
+
+@code {
+    [Parameter]
+    public List<Post> Posts { get; set; } = new();
+}

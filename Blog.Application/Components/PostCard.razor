@@ -1,0 +1,22 @@
+﻿@using Blog.Application.Contexts.PostContext.Entities
+
+<body>
+    <div class="post-card">
+        <div class="post-card-content">
+            <h4>@Post.Title</h4>
+            <p>@Post.Description</p>
+        </div>
+        <div class="btn">
+            <button type="button" class="btn btn-dark">Excluir</button>
+            <button type="button" class="btn btn-dark">Editar</button>
+        </div>
+    </div>
+</body>
+
+
+
+
+@code {
+    [Parameter]
+    public Post Post { get; set; }
+}

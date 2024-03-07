@@ -41,7 +41,7 @@ namespace Blog.Core.Contexts.PostContext.UseCases.Delete
             {
                 var post = await _repository.GetPost(new Guid(request.Id), cancellationToken);
 
-                if (post.Equals(null))
+                if (post is null)
                 {
                     return new Response("Postagem não encontrada", 404);
                 }

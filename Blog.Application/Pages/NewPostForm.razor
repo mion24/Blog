@@ -1,0 +1,32 @@
+﻿@page "/new"
+@using Blog.Application.Contexts.PostContext.Entities
+
+<div>
+    <h3>Nova Postagem</h3>
+    <form @onsubmit="HandleSubmit">
+        <div class="form-group">
+            <label for="title">Título:</label>
+            <input type="text" class="form-control" id="title" @bind="NewPost.Title" required>
+        </div>
+        <div class="form-group">
+            <label for="description">Descrição:</label>
+            <textarea class="form-control" id="description" rows="3" @bind="NewPost.Description" required></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">Enviar</button>
+    </form>
+</div>
+
+@code {
+
+    private Post NewPost { get; set; } = new Post(Guid.NewGuid());
+
+    private async Task HandleSubmit()
+    {
+        // Aqui você pode implementar a lógica para enviar a nova postagem para o servidor
+        // Por exemplo:
+        // await MyPostService.CreatePost(NewPost);
+
+        // Limpa os campos após o envio da postagem
+        NewPost = new Post(Guid.NewGuid());
+    }
+}

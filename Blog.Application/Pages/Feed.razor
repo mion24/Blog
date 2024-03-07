@@ -1,0 +1,59 @@
+﻿@page "/feed"
+@using Blog.Application.Contexts.PostContext.Entities
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize]
+
+<body>
+    <div class="post-card">
+        <Blog.Application.Components.PostList Posts="@posts"></Blog.Application.Components.PostList>
+    </div>
+</body>
+
+
+
+@code {
+    private List<Post> posts;
+
+    protected override async Task OnInitializedAsync()
+    {
+        posts = new List<Post>
+        {
+            new Post(Guid.NewGuid())
+            {
+                Title = "Sejam bem-vindos avaliadores.",
+                Description = "Esse é o front-end do blog proposto pelos senhores, está consumindo uma Minimal API, que está rodando em uma máquina virtual na digital ocean." +
+                "Foram aplicadas boas práticas de arquitetura, e um padrão de arquitetura utilizando Mediatr na criação dessa API, e esse front-end que estão visualizando foi feito em blazor WASM."
+            },
+            new Post(Guid.NewGuid())
+            {
+                Title = "Título do Post 2",
+                Description = "Descrição do Post 2"
+            },
+            new Post(Guid.NewGuid())
+            {
+                Title = "Título do Post 3",
+                Description = "Descrição do Post 3"
+            },
+            new Post(Guid.NewGuid())
+            {
+                Title = "Título do Post 4",
+                Description = "Descrição do Post 4"
+            },
+            new Post(Guid.NewGuid())
+            {
+                Title = "Título do Post 5",
+                Description = "Descrição do Post 5"
+            },
+            new Post(Guid.NewGuid())
+            {
+                Title = "Título do Post 5",
+                Description = "Descrição do Post 5"
+            },
+            new Post(Guid.NewGuid())
+            {
+                Title = "Título do Post 5",
+                Description = "Descrição do Post 5"
+            }
+        };
+    }
+}

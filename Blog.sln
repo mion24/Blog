@@ -9,7 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Blog.Core", "Blog.Core\Blog
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Blog.Infra", "Blog.Infra\Blog.Infra.csproj", "{1C604821-A4C0-443F-815C-F794BF545FEC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Blog.Application", "Blog.Application\Blog.Application.csproj", "{B42CA1C8-CE75-47D9-A466-2250D62F0D1C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Blog.Application", "Blog.Application\Blog.Application.csproj", "{B42CA1C8-CE75-47D9-A466-2250D62F0D1C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
