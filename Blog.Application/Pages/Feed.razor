@@ -38,11 +38,38 @@
     </div>
 </div>
 
+<div class="modal fade" id="editM" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Nova Postagem</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-group mb-2">
+                        <label for="title" class="label-custom">Título:</label>
+                        <input type="text" class="form-control" id="title" @bind="Post.Title" required>
+                    </div>
+                    <div class="form-group mb-2">
+                        <label for="description" class="label-custom">Descrição:</label>
+                        <textarea class="form-control" id="description" rows="3" @bind="Post.Description" required></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+                <button @onclick="SubmitForm" type="button" class="btn btn-dark">Enviar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <body>
     @if (posts.Count > 0)
     {
         <div class="post-card">
-            <Blog.Application.Components.PostList Posts="@posts" Excluir="DeletePost" Editar="UpdatePost"></Blog.Application.Components.PostList>
+            <Blog.Application.Components.PostList Posts="@posts" Excluir="DeletePost"></Blog.Application.Components.PostList>
         </div>
     }
     else
@@ -104,10 +131,6 @@
 
     private Post Post { get; set; } = new Post();
 
-    private async Task UpdatePost(Post post)
-    {
-        Post = post;
-    }
     private async Task DeletePost(Post post)
     {
         try
@@ -135,25 +158,12 @@
 
         try
         {
-            if (Post.Id.Equals(""))
-            {
-                var res = await apiService.SendRequestAsync<Contexts.ViewModels.ResponseDelete>(HttpMethod.Post, "http://159.65.182.154:8080/v1/new-post", Post);
+            var res = await apiService.SendRequestAsync<Contexts.ViewModels.ResponseDelete>(HttpMethod.Post, "http://159.65.182.154:8080/v1/new-post", Post);
 
-                if (!res.IsSuccess)
-                {
-                    errorMessage = "Ocorreu um erro ao processar a solicitação: ";
-                    errorDisplay = "block";
-                }
-            }
-            else
+            if (!res.IsSuccess)
             {
-                var res = await apiService.SendRequestAsync<Contexts.ViewModels.ResponseDelete>(HttpMethod.Put, "http://159.65.182.154:8080/v1/put-post", Post);
-
-                if (!res.IsSuccess)
-                {
-                    errorMessage = "Ocorreu um erro ao processar a solicitação: ";
-                    errorDisplay = "block";
-                }
+                errorMessage = "Ocorreu um erro ao processar a solicitação: ";
+                errorDisplay = "block";
             }
 
             await GetAll();
