@@ -9,6 +9,6 @@ namespace Blog.Core.Contexts.PostContext.UseCases.GetAll.Contracts
 {
     public interface IRepository
     {
-        Task<IEnumerable<Post>> GetAllAsync(CancellationToken cancellationToken);
+        Task<List<Post>> GetAllAsync(CancellationToken cancellationToken);
     }
 }

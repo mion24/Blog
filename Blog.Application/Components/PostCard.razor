@@ -1,22 +1,50 @@
 ﻿@using Blog.Application.Contexts.PostContext.Entities
+@using System.Net.Http.Json
+@using System.Text
+@inject ApiService apiService
 
-<body>
-    <div class="post-card">
-        <div class="post-card-content">
-            <h4>@Post.Title</h4>
-            <p>@Post.Description</p>
-        </div>
-        <div class="btn">
-            <button type="button" class="btn btn-dark">Excluir</button>
-            <button type="button" class="btn btn-dark">Editar</button>
-        </div>
+<div class="post-card" data-id="@Post.Id">
+    <div class="post-card-content">
+        <h4>@Post.Title</h4>
+        <p>@Post.Description</p>
     </div>
-</body>
-
-
-
+    <div class="btn">
+        <button type="button" class="btn btn-dark" @onclick="@(async () => { await DeletePost(Post); })">Excluir</button>
+        <button type="button" class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#novoModal" @onclick="@(async () => { await UpdatePost(Post); })">Editar</button>
+    </div>
+</div>
 
 @code {
     [Parameter]
     public Post Post { get; set; }
+
+    [Parameter]
+    public EventCallback<Post> Excluir { get; set; }
+    [Parameter]
+    public EventCallback<Post> Editar { get; set; }
+
+
+    private async Task DeletePost(Post post)
+    {
+        try
+        {
+            await Excluir.InvokeAsync(post);
+        }
+        catch (Exception ex)
+        {
+            Console.Write(ex.Message);
+        }
+    }
+
+    private async Task UpdatePost(Post post)
+    {
+        try
+        {
+            await Editar.InvokeAsync(post);
+        }
+        catch (Exception ex)
+        {
+            Console.Write(ex.Message);
+        }
+    }
 }

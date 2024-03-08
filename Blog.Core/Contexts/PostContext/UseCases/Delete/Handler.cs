@@ -52,7 +52,7 @@ namespace Blog.Core.Contexts.PostContext.UseCases.Delete
                 }
 
                 await _repository.Delete(post);
-                return new Response(post.Id.ToString());
+                return new Response(new ResponseData(post.Id.ToString()), "Excluido com sucesso");
             }
             catch (FormatException)
             {

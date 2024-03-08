@@ -1,15 +1,10 @@
 ﻿using Flunt.Notifications;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Blog.Core.Contexts.PostContext.UseCases.Delete
 {
     public class Response : SharedContext.UseCases.Response
     {
-        protected Response()
+        public Response()
         {
         }
 
@@ -26,6 +21,18 @@ namespace Blog.Core.Contexts.PostContext.UseCases.Delete
             Status = 200;
             Notifications = null;
         }
+
+        public Response(ResponseData? data, string? message = "")
+        {
+            Message = message ?? "";
+            Status = 201;
+            Notifications = null;
+            Data = data;
+        }
+        public ResponseData? Data { get; set; }
+
     }
+
+    public record ResponseData(string Id);
 }
 

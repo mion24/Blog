@@ -1,4 +1,4 @@
-﻿@page "/login"
+﻿@page "/"
 @using Blog.Application.Contexts.AccountContext
 @using Blog.Application.Contexts.ViewModels
 @using System.Text.Json
@@ -6,6 +6,7 @@
 @inject Blazored.LocalStorage.ILocalStorageService oLocalStore
 @inject NavigationManager NavManager
 @inject AuthenticationStateProvider AuthStateProvider
+@inject ApiService apiService
 @layout EmptyLayout
 
 <body>
@@ -15,7 +16,7 @@
         <input type="password" placeholder="Digite sua senha" class="input-field" @bind="accountViewModel.Password">
         <div class="btn-container">
             <button type="button" class="btn btn-dark" @onclick="SubmitForm">Fazer login</button>
-            <button type="button" class="btn btn-dark">Registrar-se</button>
+            <button type="button" class="btn btn-dark" @onclick="RedirectToRegister">Registrar-se</button>
         </div>
     </div>
 </body>
@@ -25,20 +26,14 @@
     private async Task SubmitForm()
     {
         using var httpClient = new HttpClient();
-        var url = "https://localhost:7029/v1/authenticate";
 
         try
         {
-            var jsonRequest = JsonSerializer.Serialize(accountViewModel);
-            var content = new StringContent(jsonRequest, System.Text.Encoding.UTF8, "application/json");
+            var res = await apiService.SendRequestAsync<Blog.Application.Contexts.ViewModels.ResponseLogin>(HttpMethod.Post, $"http://159.65.182.154:8080/v1/authenticate", accountViewModel);
 
-            var res = await httpClient.PostAsync(url, content);
-
-            if (res.IsSuccessStatusCode)
+            if (res.IsSuccess)
             {
-                var responseContent = await res.Content.ReadAsStringAsync();
-                var jsonObject = JsonSerializer.Deserialize<JsonElement>(responseContent);
-                var token = jsonObject.GetProperty("data").GetProperty("token").GetString();
+                var token = res.Data.Token;
 
                 await oLocalStore.SetItemAsync("token", token);
 
@@ -54,5 +49,10 @@
         {
             throw;
         }
+    }
+
+    private void RedirectToRegister()
+    {
+        NavManager.NavigateTo("/register");
     }
 }

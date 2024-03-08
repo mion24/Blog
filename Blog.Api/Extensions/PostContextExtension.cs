@@ -58,7 +58,7 @@ namespace Blog.Api.Extensions
 
             #region delete
             app.MapPost("v1/delete-post", async (
-             Blog.Core.Contexts.PostContext.UseCases.Delete.Request request,
+            Blog.Core.Contexts.PostContext.UseCases.Delete.Request request,
              IRequestHandler<
                  Blog.Core.Contexts.PostContext.UseCases.Delete.Request,
                  Blog.Core.Contexts.PostContext.UseCases.Delete.Response> handler) =>

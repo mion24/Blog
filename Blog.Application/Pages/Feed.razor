@@ -1,59 +1,167 @@
 ﻿@page "/feed"
 @using Blog.Application.Contexts.PostContext.Entities
+@using Blog.Application.Contexts.ViewModels
 @using Microsoft.AspNetCore.Authorization
+@inject Blazored.LocalStorage.ILocalStorageService oLocalStore
+
+@using System.Net.Http.Json
+@using System.Text
+@inject ApiService apiService
+
 @attribute [Authorize]
 
-<body>
-    <div class="post-card">
-        <Blog.Application.Components.PostList Posts="@posts"></Blog.Application.Components.PostList>
+<!-- Modal -->
+<div class="modal fade" id="novoModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Nova Postagem</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-group mb-2">
+                        <label for="title" class="label-custom">Título:</label>
+                        <input type="text" class="form-control" id="title" @bind="Post.Title" required>
+                    </div>
+                    <div class="form-group mb-2">
+                        <label for="description" class="label-custom">Descrição:</label>
+                        <textarea class="form-control" id="description" rows="3" @bind="Post.Description" required></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+                <button @onclick="SubmitForm" type="button" class="btn btn-dark">Enviar</button>
+            </div>
+        </div>
     </div>
+</div>
+
+<body>
+    @if (posts.Count > 0)
+    {
+        <div class="post-card">
+            <Blog.Application.Components.PostList Posts="@posts" Excluir="DeletePost" Editar="UpdatePost"></Blog.Application.Components.PostList>
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-info" role="alert">
+            Não há posts disponíveis.
+        </div>
+    }
 </body>
 
+<div class="alert alert-danger" role="alert" style="display: @errorDisplay">
+    @errorMessage
+</div>
 
 
 @code {
-    private List<Post> posts;
+
+    private List<Post> posts = new();
+    private string errorMessage = string.Empty;
+    private string errorDisplay = "none";
 
     protected override async Task OnInitializedAsync()
     {
-        posts = new List<Post>
-        {
-            new Post(Guid.NewGuid())
-            {
-                Title = "Sejam bem-vindos avaliadores.",
-                Description = "Esse é o front-end do blog proposto pelos senhores, está consumindo uma Minimal API, que está rodando em uma máquina virtual na digital ocean." +
-                "Foram aplicadas boas práticas de arquitetura, e um padrão de arquitetura utilizando Mediatr na criação dessa API, e esse front-end que estão visualizando foi feito em blazor WASM."
-            },
-            new Post(Guid.NewGuid())
-            {
-                Title = "Título do Post 2",
-                Description = "Descrição do Post 2"
-            },
-            new Post(Guid.NewGuid())
-            {
-                Title = "Título do Post 3",
-                Description = "Descrição do Post 3"
-            },
-            new Post(Guid.NewGuid())
-            {
-                Title = "Título do Post 4",
-                Description = "Descrição do Post 4"
-            },
-            new Post(Guid.NewGuid())
-            {
-                Title = "Título do Post 5",
-                Description = "Descrição do Post 5"
-            },
-            new Post(Guid.NewGuid())
-            {
-                Title = "Título do Post 5",
-                Description = "Descrição do Post 5"
-            },
-            new Post(Guid.NewGuid())
-            {
-                Title = "Título do Post 5",
-                Description = "Descrição do Post 5"
-            }
-        };
+        await GetAll();
     }
+
+    private async Task GetAll()
+    {
+        try
+        {
+            var res = await apiService.SendRequestAsync<ResponseGetAll>(HttpMethod.Get, $"http://159.65.182.154:8080/v1/posts");
+
+            if (res.IsSuccess)
+            {
+                foreach (var item in res.Data.Posts)
+                {
+                    if (posts.FirstOrDefault(x => x.Id == item.Id) == null)
+                    {
+                        posts.Add(new Blog.Application.Contexts.PostContext.Entities.Post
+                            {
+                                Description = item.Description,
+                                Id = item.Id,
+                                Title = item.Title
+                            });
+                    }
+                }
+                this.StateHasChanged();
+            }
+            else
+            {
+                errorMessage = "Falha ao carregar posts";
+                errorDisplay = "block";
+            }
+        }
+        catch
+        {
+        }
+    }
+
+    private Post Post { get; set; } = new Post();
+
+    private async Task UpdatePost(Post post)
+    {
+        Post = post;
+    }
+    private async Task DeletePost(Post post)
+    {
+        try
+        {
+            var res = await apiService.SendRequestAsync<Blog.Application.Contexts.ViewModels.ResponseDelete>(HttpMethod.Post, $"http://159.65.182.154:8080/v1/delete-post", post);
+            if (res.IsSuccess && res.Data != null)
+            {
+                var i = this.posts.FindIndex(x => x.Id.ToString() == res.Data.Id);
+                if (i > -1)
+                    this.posts.RemoveAt(i);
+
+                this.StateHasChanged();
+            }
+
+        }
+        catch (Exception ex)
+        {
+            Console.Write(ex.Message);
+        }
+    }
+
+    private async Task SubmitForm()
+    {
+        using var httpClient = new HttpClient();
+
+        try
+        {
+            if (Post.Id.Equals(""))
+            {
+                var res = await apiService.SendRequestAsync<Contexts.ViewModels.ResponseDelete>(HttpMethod.Post, "http://159.65.182.154:8080/v1/new-post", Post);
+
+                if (!res.IsSuccess)
+                {
+                    errorMessage = "Ocorreu um erro ao processar a solicitação: ";
+                    errorDisplay = "block";
+                }
+            }
+            else
+            {
+                var res = await apiService.SendRequestAsync<Contexts.ViewModels.ResponseDelete>(HttpMethod.Put, "http://159.65.182.154:8080/v1/put-post", Post);
+
+                if (!res.IsSuccess)
+                {
+                    errorMessage = "Ocorreu um erro ao processar a solicitação: ";
+                    errorDisplay = "block";
+                }
+            }
+
+            await GetAll();
+        }
+        catch (Exception)
+        {
+            throw;
+        }
+    }
+
 }

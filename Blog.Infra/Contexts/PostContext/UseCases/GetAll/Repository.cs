@@ -19,7 +19,7 @@ namespace Blog.Infra.Contexts.PostContext.UseCases.GetAll
             _context = context;
         }
 
-        public async Task<IEnumerable<Post>> GetAllAsync(CancellationToken cancellationToken)
+        public async Task<List<Post>> GetAllAsync(CancellationToken cancellationToken)
         {
             return await _context.Posts.AsNoTracking().ToListAsync(cancellationToken: cancellationToken);
         }

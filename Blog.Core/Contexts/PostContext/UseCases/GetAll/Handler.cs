@@ -23,7 +23,7 @@ namespace Blog.Core.Contexts.PostContext.UseCases.GetAll
         {
 			try
 			{
-                IEnumerable<Post> posts = await _repository.GetAllAsync(cancellationToken);
+                List<Post> posts = await _repository.GetAllAsync(cancellationToken);
 
                 if (!posts.Any())
                 {

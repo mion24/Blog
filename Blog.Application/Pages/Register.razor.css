@@ -3,7 +3,7 @@
     background-color: #333;
     color: #fff;
     width: 900px;
-    height: 300px;
+    height: 400px;
     padding: 20px;
     border-radius: 10px;
     margin: 50px auto;
@@ -30,7 +30,7 @@
 }
 
 .btn {
-    width: calc(50% - 5px);
+    width: 100%;
     padding: 10px;
     border: none;
     background-color: #555;

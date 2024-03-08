@@ -1,12 +1,47 @@
 ﻿@using Blog.Application.Contexts.PostContext.Entities
+@using System.Net.Http.Json
+@using System.Text
+@inject ApiService apiService
+
 @foreach (var post in Posts)
 {
     <div class="post-card">
-        <PostCard Post="@post" />
+        <PostCard Post="@post" Excluir="DeletePost" Editar="UpdatePost" />
+
     </div>
 }
 
 @code {
+
     [Parameter]
     public List<Post> Posts { get; set; } = new();
+
+    [Parameter]
+    public EventCallback<Post> Excluir { get; set; }
+    [Parameter]
+    public EventCallback<Post> Editar { get; set; }
+
+    private async Task DeletePost(Post post)
+    {
+        try
+        {
+            await Excluir.InvokeAsync(post);
+        }
+        catch (Exception ex)
+        {
+            Console.Write(ex.Message);
+        }
+    }
+
+    private async Task UpdatePost(Post post)
+    {
+        try
+        {
+            await Editar.InvokeAsync(post);
+        }
+        catch (Exception ex)
+        {
+            Console.Write(ex.Message);
+        }
+    }
 }

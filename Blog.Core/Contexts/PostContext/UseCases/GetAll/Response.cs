@@ -32,6 +32,6 @@ namespace Blog.Core.Contexts.PostContext.UseCases.GetAll
         public ResponseData? Data { get; set; }
     }
 
-    public record ResponseData(IEnumerable<Post> Posts);
+    public record ResponseData(List<Post> Posts);
 }
 
