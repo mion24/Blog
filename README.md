@@ -72,24 +72,6 @@ Resposta de Sucesso
 - *Código*: 200 OK
 - *Corpo*: string Token, string Id, string Name, string Email, string[] Roles
 --------------------------------------------------------------------------------------
-### v1/new-post: Fazer nova Postagem
-
-*Descrição*: Insere uma nova postagem.
-
-- *Método HTTP*: POST
-- *URL*: v1/new-post
-- *Requer Autenticação*: Sim
-
-Parâmetros da Requisição
-
-- *Body*:
-  string Title, string Description
-
-Resposta de Sucesso
-
-- *Código*: 200 OK
-- *Corpo*: string Id
---------------------------------------------------------------------------------------
 ### v1/posts: Get todas as postagens
 
 *Descrição*: Get todas as postagens.
